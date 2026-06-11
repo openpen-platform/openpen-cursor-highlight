@@ -1,0 +1,11 @@
+{
+  "name": "Cursor Highlight",
+  "description": "A coloured glow that follows the cursor so viewers can track it during screen sharing or recording. Optional click ripple. Toggle on/off from the control bar.",
+  "toggle": "Cursor highlight",
+  "settings": {
+    "color": "Glow color",
+    "size": "Glow size",
+    "opacity": "Opacity",
+    "ripple": "Click ripple"
+  }
+}
