@@ -6,6 +6,7 @@ import {
   type CursorHighlightSettings,
   DEFAULT_SETTINGS,
 } from './live-settings'
+import { clampGlowOpacity, clampSize, normalizeColor } from './highlight-settings'
 import {
   canvasPixelSize,
   clampOpacity,
@@ -198,9 +199,9 @@ function stopListening(): void {
 function applySettings(s: CursorHighlightSettings): void {
   const wasEnabled = live.enabled
   live.enabled = s.enabled
-  live.color = s.color
-  live.size = s.size
-  live.opacity = s.opacity
+  live.color = normalizeColor(s.color)
+  live.size = clampSize(s.size)
+  live.opacity = clampGlowOpacity(s.opacity)
   live.ripple = s.ripple
   if (s.enabled && !wasEnabled) startListening()
   else if (!s.enabled && wasEnabled) stopListening()

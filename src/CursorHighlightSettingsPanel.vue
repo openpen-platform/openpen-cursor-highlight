@@ -3,7 +3,17 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useModuleContext } from '@openpen/module-api'
 import { AppSlider, AppToggle } from '@openpen/module-api/uikit'
 import { MODULE_ID } from './module-id'
+import { vSliderName } from './slider-name'
 import type { CursorHighlightSettings } from './live-settings'
+import {
+  OPACITY_MAX,
+  OPACITY_MIN,
+  SIZE_MAX,
+  SIZE_MIN,
+  clampGlowOpacity,
+  clampSize,
+  normalizeColor,
+} from './highlight-settings'
 
 const ctx = useModuleContext(MODULE_ID)
 
@@ -15,14 +25,14 @@ let unsub: (() => void) | null = null
 
 onMounted(() => {
   const s = ctx.getSettings<CursorHighlightSettings>()
-  color.value = s.color
-  size.value = s.size
-  opacity.value = s.opacity
+  color.value = normalizeColor(s.color)
+  size.value = clampSize(s.size)
+  opacity.value = clampGlowOpacity(s.opacity)
   ripple.value = s.ripple
   unsub = ctx.onSettingsChange<CursorHighlightSettings>((next) => {
-    color.value = next.color
-    size.value = next.size
-    opacity.value = next.opacity
+    color.value = normalizeColor(next.color)
+    size.value = clampSize(next.size)
+    opacity.value = clampGlowOpacity(next.opacity)
     ripple.value = next.ripple
   })
 })
@@ -74,27 +84,31 @@ async function setRipple(value: boolean) {
     </div>
     <div class="ch-row">
       <div class="ch-row-label">{{ sizeLabel }}</div>
+      <div v-slider-name="sizeLabel">
       <AppSlider
         :model-value="size"
-        :min="16"
-        :max="160"
+        :min="SIZE_MIN"
+        :max="SIZE_MAX"
         :step="1"
         width="120px"
         :aria-label="sizeLabel"
         @update:model-value="setSize"
       />
+      </div>
     </div>
     <div class="ch-row">
       <div class="ch-row-label">{{ opacityLabel }}</div>
+      <div v-slider-name="opacityLabel">
       <AppSlider
         :model-value="opacityPercent"
-        :min="10"
-        :max="100"
+        :min="Math.round(OPACITY_MIN * 100)"
+        :max="Math.round(OPACITY_MAX * 100)"
         :step="1"
         width="120px"
         :aria-label="opacityLabel"
         @update:model-value="setOpacity"
       />
+      </div>
     </div>
     <div class="ch-row">
       <div class="ch-row-label">{{ rippleLabel }}</div>

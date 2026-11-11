@@ -8,12 +8,20 @@
  * one source of truth without prop-drilling.
  */
 import { z } from '@openpen/module-api'
+import {
+  COLOR_DEFAULT,
+  OPACITY_DEFAULT,
+  SIZE_DEFAULT,
+} from './highlight-settings'
 
 export const settingsSchema = z.object({
   enabled: z.boolean().default(false),
-  color: z.string().default('#ffcc00'),
-  size: z.number().min(16).max(160).default(100),
-  opacity: z.number().min(0.1).max(1).default(0.6),
+  color: z.string().default(COLOR_DEFAULT),
+  // Unbounded on purpose: an out-of-range saved value is clamped on read
+  // (highlight-settings.ts) instead of failing validation and discarding the
+  // whole settings object.
+  size: z.number().default(SIZE_DEFAULT),
+  opacity: z.number().default(OPACITY_DEFAULT),
   ripple: z.boolean().default(true),
 })
 
@@ -21,8 +29,8 @@ export type CursorHighlightSettings = z.infer<typeof settingsSchema>
 
 export const DEFAULT_SETTINGS: CursorHighlightSettings = {
   enabled: false,
-  color: '#ffcc00',
-  size: 100,
-  opacity: 0.6,
+  color: COLOR_DEFAULT,
+  size: SIZE_DEFAULT,
+  opacity: OPACITY_DEFAULT,
   ripple: true,
 }

@@ -1,9 +1,14 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
+import type { ModuleSetupContext } from '@openpen/module-api'
 import { readFileSync, readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 import module, { MODULE_ID } from '../src/index'
 import { settingsSchema, DEFAULT_SETTINGS } from '../src/live-settings'
+import en from '../src/locales/en.json'
+import zhHant from '../src/locales/zh-Hant.json'
+import zhHans from '../src/locales/zh-Hans.json'
+import ja from '../src/locales/ja.json'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const srcDir = join(here, '..', 'src')
@@ -74,18 +79,77 @@ describe('settingsSchema', () => {
     expect(settingsSchema.parse({}).enabled).toBe(false)
   })
 
-  it('enforces the size range (16–160)', () => {
-    expect(() => settingsSchema.parse({ size: 15 })).toThrow()
-    expect(() => settingsSchema.parse({ size: 161 })).toThrow()
-    expect(settingsSchema.parse({ size: 16 }).size).toBe(16)
-    expect(settingsSchema.parse({ size: 160 }).size).toBe(160)
+  it('does not reject the whole settings object over one out-of-range value (clamped on read instead)', () => {
+    expect(() => settingsSchema.parse({ size: 15, opacity: 1.5 })).not.toThrow()
+    expect(() => settingsSchema.parse({ size: 999, opacity: 0 })).not.toThrow()
+  })
+})
+
+/** Flatten a nested locale dictionary into dotted keys. */
+function leafKeys(dict: Record<string, unknown>, prefix = ''): string[] {
+  return Object.entries(dict).flatMap(([k, v]) =>
+    typeof v === 'object' && v !== null
+      ? leafKeys(v as Record<string, unknown>, `${prefix}${k}.`)
+      : [`${prefix}${k}`],
+  )
+}
+
+function leafValue(dict: Record<string, unknown>, path: string): unknown {
+  return path.split('.').reduce<unknown>((o, k) => (o as Record<string, unknown>)[k], dict)
+}
+
+describe('toggle shortcut (AC#2)', () => {
+  const shortcut = () => module.contributes!.shortcuts?.find((s) => s.id === 'toggle-cursor-highlight')
+
+  it('registers a rebindable global shortcut with a label in all four languages', () => {
+    const s = shortcut()!
+    expect(s.keys).toBeTruthy()
+    expect(s.scope).toBe('global')
+    expect(s.userCustomizable).toBe(true)
+    expect(Object.keys(s.label as Record<string, string>).sort()).toEqual(['en', 'ja', 'zh-Hans', 'zh-Hant'])
   })
 
-  it('enforces the opacity range (0.1–1)', () => {
-    expect(() => settingsSchema.parse({ opacity: 0.05 })).toThrow()
-    expect(() => settingsSchema.parse({ opacity: 1.5 })).toThrow()
-    expect(settingsSchema.parse({ opacity: 0.1 }).opacity).toBe(0.1)
-    expect(settingsSchema.parse({ opacity: 1 }).opacity).toBe(1)
+  it('flips the persisted enabled flag each time it fires (off -> on -> off)', async () => {
+    let current = { enabled: false }
+    const updateSettings = vi.fn(async (patch: Partial<typeof current>) => {
+      current = { ...current, ...patch }
+    })
+    module.setup!({
+      getSettings: () => current,
+      updateSettings,
+      onSettingsChange: () => () => {},
+      onDispose: () => {},
+    } as unknown as ModuleSetupContext)
+    shortcut()!.handler()
+    expect(updateSettings).toHaveBeenLastCalledWith({ enabled: true })
+    await Promise.resolve()
+    shortcut()!.handler()
+    expect(updateSettings).toHaveBeenLastCalledWith({ enabled: false })
+  })
+})
+
+describe('locales (AC#4)', () => {
+  const locales = { en, 'zh-Hant': zhHant, 'zh-Hans': zhHans, ja } as Record<string, Record<string, unknown>>
+
+  it('every language has exactly the English key set, each with a non-empty string', () => {
+    const base = leafKeys(en).sort()
+    expect(base).toContain('options.label')
+    expect(base).toContain('colors.ffcc00')
+    for (const [name, dict] of Object.entries(locales)) {
+      expect(leafKeys(dict).sort(), name).toEqual(base)
+      for (const key of base) {
+        const v = leafValue(dict, key)
+        expect(typeof v === 'string' && v.trim().length > 0, `${name}:${key}`).toBe(true)
+      }
+    }
+  })
+
+  it('non-English languages translate the new strings instead of copying English', () => {
+    for (const name of ['zh-Hant', 'zh-Hans', 'ja']) {
+      for (const key of ['options.label', 'colors.ffcc00', 'colors.ffffff']) {
+        expect(leafValue(locales[name], key), `${name}:${key}`).not.toBe(leafValue(en, key))
+      }
+    }
   })
 })
 

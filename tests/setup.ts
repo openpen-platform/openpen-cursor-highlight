@@ -6,3 +6,15 @@
  * output, so a null context is the faithful stand-in.
  */
 HTMLCanvasElement.prototype.getContext = () => null as never
+
+/**
+ * jsdom has no ResizeObserver; the uikit slider (reka-ui) constructs one on
+ * mount. The tests assert emitted values, not layout, so an inert stand-in is
+ * faithful.
+ */
+class ResizeObserverStub {
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
+}
+;(globalThis as { ResizeObserver?: unknown }).ResizeObserver ??= ResizeObserverStub

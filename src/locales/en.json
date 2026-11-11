@@ -7,5 +7,16 @@
     "size": "Glow size",
     "opacity": "Opacity",
     "ripple": "Click ripple"
+  },
+  "options": {
+    "label": "Cursor highlight options"
+  },
+  "colors": {
+    "ffcc00": "Yellow",
+    "ff3b30": "Red",
+    "34c759": "Green",
+    "0a84ff": "Blue",
+    "bf5af2": "Purple",
+    "ffffff": "White"
   }
 }

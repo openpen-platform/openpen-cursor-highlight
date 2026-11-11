@@ -26,20 +26,31 @@ npx openpen-cli plugin add .
 
 ## Usage
 
-1. Click the **Cursor highlight** button in the control bar's effects group to
-   turn the highlight on. The button is highlighted while it is on.
+1. Click the **Cursor highlight** button in the control bar's effects group,
+   or press **Ctrl+Alt+H** (**⌘⌥H** on macOS), to turn the highlight on. The
+   button is highlighted while it is on. The shortcut is not available on
+   Linux Wayland sessions; use the button there.
 2. Move the cursor. The glow follows it.
-3. Click anywhere to show a ripple at the click point, unless **Click ripple**
+3. To adjust it on the spot, click the small caret next to the **Cursor
+   highlight** button (this also turns the highlight on) and use the panel:
+   pick a **Glow color** swatch, and drag **Glow size** and **Opacity**.
+   Changes apply immediately and are kept across restarts.
+4. Click anywhere to show a ripple at the click point, unless **Click ripple**
    is turned off in the settings.
-4. Click the button again to turn the highlight off. While it is off the
-   plugin does not track the cursor or clicks.
+5. Click the button or press the shortcut again to turn the highlight off.
+   While it is off the plugin does not track the cursor or clicks.
 
 The highlight is off until you turn it on, and the on/off state is saved with
 the other settings.
 
 ## Settings
 
-Open OpenPen's settings and choose the **Cursor Highlight** panel.
+The control-bar panel is for quick adjustments: it offers six preset color
+swatches, plus **Glow size** and **Opacity**. The settings page, under the
+**Cursor Highlight** panel, has the same size and opacity options, a color
+picker for any custom glow color, and the **Click ripple** switch. A custom
+color chosen in the settings page is applied as is; the panel shows no swatch
+as selected for it.
 
 | Setting | Values | Default | Description |
 | --- | --- | --- | --- |
@@ -48,8 +59,11 @@ Open OpenPen's settings and choose the **Cursor Highlight** panel.
 | **Opacity** | 10% to 100% | 60% | Opacity of the glow (stored as 0.1 to 1) |
 | **Click ripple** | on, off | on | Show a ripple that expands and fades at each click |
 
+A saved value outside the allowed range is clamped back into it.
+
 The on/off state is also stored as a setting (`enabled`, default off). It is
-changed with the control bar button rather than in the settings panel.
+changed with the control bar button or the shortcut rather than in the settings
+panel. The shortcut can be rebound under **Settings → Shortcuts**.
 
 ## License
 
