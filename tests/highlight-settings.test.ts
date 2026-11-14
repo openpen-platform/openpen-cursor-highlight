@@ -68,13 +68,13 @@ describe('options panel — AC#1 adjustments apply immediately, AC#5 saved value
   it('saved size 999 / opacity 5 show as 160px / 100%, and 5 / 0 as 16px / 10%', async () => {
     const hi = mountWith({ size: 999, opacity: 5 })
     await nextTick()
-    expect(hi.wrapper.find('[data-testid="cursor-highlight-size-value"]').text()).toBe('160px')
-    expect(hi.wrapper.find('[data-testid="cursor-highlight-opacity-value"]').text()).toBe('100%')
+    expect(hi.wrapper.findAll('[role="slider"]')[0].attributes('aria-valuetext')).toBe('160px')
+    expect(hi.wrapper.findAll('[role="slider"]')[1].attributes('aria-valuetext')).toBe('100%')
     hi.wrapper.unmount()
 
     const lo = mountWith({ size: 5, opacity: 0 })
     await nextTick()
-    expect(lo.wrapper.find('[data-testid="cursor-highlight-size-value"]').text()).toBe('16px')
-    expect(lo.wrapper.find('[data-testid="cursor-highlight-opacity-value"]').text()).toBe('10%')
+    expect(lo.wrapper.findAll('[role="slider"]')[0].attributes('aria-valuetext')).toBe('16px')
+    expect(lo.wrapper.findAll('[role="slider"]')[1].attributes('aria-valuetext')).toBe('10%')
   })
 })
