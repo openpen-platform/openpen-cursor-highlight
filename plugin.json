@@ -4,6 +4,6 @@
   "version": "1.0.0",
   "author": "OpenPen",
   "description": "A coloured glow that follows the cursor so viewers can track it during screen sharing or recording. Optional click ripple. Toggle on/off from the control bar.",
-  "minAppVersion": "1.0.0",
+  "minAppVersion": "1.6.0",
   "renderer": "dist/renderer.js"
 }
