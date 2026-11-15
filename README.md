@@ -6,6 +6,12 @@ Draws a colored glow that follows the cursor so viewers can track it during
 screen sharing or recording, with an optional ripple on each click made in
 drawing mode.
 
+<p align="center">
+  <img src=".github/readme-demo.gif" alt="OpenPen Cursor Highlight: a yellow glow follows the cursor through an inbox, the panel switches the glow to purple and back, and in drawing mode each click on the open message shows a ripple" width="800" />
+</p>
+
+<p align="center"><sub>Background: Mail example from shadcn/ui by shadcn (https://ui.shadcn.com), MIT License (https://opensource.org/license/mit), shown in its dark theme with a blank strip added at the top; icons by Lucide (ISC). The messages are fictional.</sub></p>
+
 ## Install
 
 Requires OpenPen 1.0.0 or later.
