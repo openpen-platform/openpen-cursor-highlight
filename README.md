@@ -3,7 +3,8 @@
 A cursor highlight for [OpenPen](https://github.com/openpen-platform/openpen).
 
 Draws a colored glow that follows the cursor so viewers can track it during
-screen sharing or recording, with an optional ripple on every click.
+screen sharing or recording, with an optional ripple on each click made in
+drawing mode.
 
 ## Install
 
@@ -35,8 +36,10 @@ npx openpen-cli plugin add .
    highlight** button (this also turns the highlight on) and use the panel:
    pick a **Glow color** swatch, and drag **Glow size** and **Opacity**.
    Changes apply immediately and are kept across restarts.
-4. Click anywhere to show a ripple at the click point, unless **Click ripple**
-   is turned off in the settings.
+4. While drawing mode is on, click anywhere to show a ripple at the click
+   point, unless **Click ripple** is turned off in the settings. The ripple
+   does not appear outside drawing mode, because clicks pass straight through
+   to the app underneath and the plugin never receives them.
 5. Click the button or press the shortcut again to turn the highlight off.
    While it is off the plugin does not track the cursor or clicks.
 
@@ -57,7 +60,7 @@ as selected for it.
 | **Glow color** | any color | `#ffcc00` | Color of the glow |
 | **Glow size** | 16 to 160 | 100 | Size of the glow |
 | **Opacity** | 10% to 100% | 60% | Opacity of the glow (stored as 0.1 to 1) |
-| **Click ripple** | on, off | on | Show a ripple that expands and fades at each click |
+| **Click ripple** | on, off | on | Show a ripple that expands and fades at each click in drawing mode |
 
 A saved value outside the allowed range is clamped back into it.
 
