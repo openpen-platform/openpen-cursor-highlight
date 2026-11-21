@@ -1,9 +1,18 @@
 {
   "id": "@openpen/cursor-highlight",
   "name": "Cursor Highlight",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "OpenPen",
-  "description": "A coloured glow that follows the cursor so viewers can track it during screen sharing or recording. Optional click ripple while drawing mode is on. Toggle on/off from the control bar.",
+  "description": "Adds a coloured glow that follows the cursor in screen shares and recordings, toggled from the control bar, plus an optional click ripple in drawing mode.",
+  "descriptionLocalized": { "zh-Hant": "游標周圍加上彩色光暈，分享螢幕時觀眾能一路跟上；可選點擊漣漪。", "zh-Hans": "游标周围加上彩色光晕，分享屏幕时观众能一路跟上；可选点击涟漪。" },
+  "icon": ".github/marketplace/icon.png",
+  "screenshots": [
+    { "src": ".github/marketplace/cover.png", "alt": "A yellow glow surrounds the cursor in a mail inbox." },
+    { "src": ".github/readme-demo.gif", "alt": "The glow follows the cursor, then the panel changes its colour and size." }
+  ],
   "minAppVersion": "1.6.0",
-  "renderer": "dist/renderer.js"
+  "renderer": "dist/renderer.js",
+  "changelog": [
+    "1.0.1: Marketplace icon, cover image and Traditional and Simplified Chinese descriptions."
+  ]
 }

@@ -1,6 +1,6 @@
 {
   "name": "openpen-plugin-cursor-highlight",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cursor highlight glow for OpenPen.",
   "type": "module",
   "private": true,

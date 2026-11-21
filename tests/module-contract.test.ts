@@ -20,7 +20,7 @@ describe('defineModule contract', () => {
   })
 
   it('declares a version (required for plugins)', () => {
-    expect(module.version).toBe('1.0.0')
+    expect(module.version).toBe('1.0.1')
   })
 
   it('carries the settings schema used to validate writes', () => {
